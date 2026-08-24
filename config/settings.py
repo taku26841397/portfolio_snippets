@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-spy8n40^n%0903rbc5ppe90c&b1#433!o+8ax3cjd3b47xgt(m'
+# SECRET_KEY = 'django-insecure-spy8n40^n%0903rbc5ppe90c&b1#433!o+8ax3cjd3b47xgt(m'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['snippets.onrender.com']
+ALLOWED_HOSTS = ['portfolio-snippets.onrender.com']
 
 
 # Application definition
@@ -147,3 +148,17 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 
+
+SECRET_KEY = os.environ.get("SECRET_KEY",'django-insecure-spy8n40^n%0903rbc5ppe90c&b1#433!o+8ax3cjd3b47xgt(m')
+
+
+#Render の PostgreSQL に自動接続
+import dj_database_url
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True
+    )
+}
