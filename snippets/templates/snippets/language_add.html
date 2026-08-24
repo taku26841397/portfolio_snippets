@@ -1,0 +1,16 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">言語を追加</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label class="form-label">言語名</label>
+        <input type="text" name="name" class="form-control" placeholder="例: Python">
+    </div>
+
+    <button class="btn btn-primary">追加する</button>
+</form>
+
+{% endblock %}

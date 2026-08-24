@@ -1,0 +1,33 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2>最新のスニペット</h2>
+<a href="{% url 'snippet_add' %}" class="btn btn-outline-dark mb-3">
+    ＋ スニペットを追加
+</a>
+
+{% for s in snippets %}
+<a href="{% url 'snippet_detail' s.pk %}" class="snippet-card-link">
+    <div class="card mb-3 snippet-card">
+        <div class="card-body">
+
+            <h5 class="card-title mb-2">{{ s.title }}</h5>
+
+            <div class="snippet-meta mb-2">
+                <span class="badge bg-secondary me-1">{{ s.language.name }}</span>
+                <span class="badge bg-light text-muted">{{ s.SubCategory.name }}</span>
+            </div>
+
+            {% if s.description %}
+            <p class="card-text text-muted">{{ s.description }}</p>
+            {% endif %}
+
+            <p class="text-muted small mt-2">
+                投稿日: {{ s.created_at|date:"Y-m-d H:i" }}
+            </p>
+
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}

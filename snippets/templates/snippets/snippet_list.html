@@ -1,0 +1,76 @@
+{% extends "snippets/base.html" %}
+{% load static %}
+
+{% block main %}
+<h2>スニペット一覧</h2>
+<div class="mb-3">
+    <a href="{% url 'snippet_add' %}" class="btn btn-outline-secondary btn-sm me-2">
+    ＋ Add Snippet
+    </a>
+    <a href="{% url 'prompt_add' pk=8 %}" class="btn btn-outline-secondary btn-sm me-2">
+        ＋ Add Prompt
+    </a>
+
+
+    <a href="{% url 'imageprompt_add' pk=8 %}" class="btn btn-outline-secondary btn-sm">
+        ＋ Add ImagePrompt
+    </a>
+</div>
+
+{% for s in snippets %}
+<a href="{% url 'snippet_detail' s.pk %}" class="snippet-card-link">
+    <div class="card mb-3 snippet-card">
+        <div class="card-body">
+
+            <h5 class="card-title mb-2">{{ s.title }}</h5>
+
+            <div class="snippet-meta mb-2">
+                <span class="badge bg-secondary me-1">{{ s.language.name }}</span>
+                <span class="badge bg-light text-muted">{{ s.SubCategory.name }}</span>
+            </div>
+
+            {% if s.description %}
+            <p class="card-text text-muted">{{ s.description }}</p>
+            {% endif %}
+
+            <p class="text-muted small mt-2">
+                投稿日: {{ s.created_at|date:"Y-m-d H:i" }}
+            </p>
+
+        </div>
+    </div>
+</a>
+{% endfor %}
+
+<!-- ページネーション -->
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center">
+
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">前へ</a>
+      </li>
+    {% endif %}
+
+    {% for num in page_obj.paginator.page_range %}
+      {% if num == page_obj.number %}
+        <li class="page-item active">
+          <span class="page-link">{{ num }}</span>
+        </li>
+      {% else %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+        </li>
+      {% endif %}
+    {% endfor %}
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">次へ</a>
+      </li>
+    {% endif %}
+
+  </ul>
+</nav>
+
+{% endblock %}

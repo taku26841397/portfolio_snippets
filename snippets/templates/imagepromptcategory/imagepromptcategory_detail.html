@@ -1,0 +1,66 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">{{ subcategory.name }} のスニペット</h2>
+
+    <div class="mb-3">
+        <a href="{% url 'imageprompt_add' lang.pk %}?subcategory={{ subcategory.pk }}" class="btn btn-outline-secondary btn-sm">
+            ＋ Add ImagePrompt
+        </a>
+    </div>
+
+        {% for image in items %}
+        <a href="{% url 'imageprompt_detail' image.pk %}" class="snippet-card-link">
+            <div class="card mb-3 snippet-card">
+                <div class="card-body">
+
+                    <h5 class="card-title mb-2">{{ image.title }}</h5>
+
+                    <div class="snippet-meta mb-2">
+                        <span class="badge bg-secondary me-1">{{ image.language.name }}</span>
+                        <span class="badge bg-light text-muted">{{ image.image_prompt_category.name }}</span>
+                    </div>
+
+                    {% if s.description %}
+                    <p class="card-text text-muted">{{ image.description }}</p>
+                    {% endif %}
+
+                    <p class="text-muted small mt-2">
+                        投稿日: {{ image.created_at|date:"Y-m-d H:i" }}
+                    </p>
+
+                </div>
+            </div>
+        </a>
+        {% empty %}
+            <p>このカテゴリにはまだプロンプトがありません。</p>
+        {% endfor %}
+
+
+
+
+{% endblock %}
+
+{% block sidebar_extra %}
+{% for sub in subcategories %}
+<a class="subcat-link" href="{% url 'imagepromptcategory_detail' sub.pk %}">
+    {{ sub.name }}
+</a>
+{% empty %}
+<span class="subcat-empty">まだありません</span>
+{% endfor %}
+
+<a class="subcat-link add" href="{% url 'imagepromptcategory_add' %}">
+    ＋ Add
+</a>
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a class="link-underline" href="{% url 'snippets_list' %}">Snippets List</a></li>
+    <li class="breadcrumb-item"><a class="link-underline" href="{% url 'language_detail' lang.pk %}">{{ lang.name }}</a></li>
+    <li class="breadcrumb-item active">{{ subcategory.name }}</li>
+  </ol>
+</nav>
+{% endblock %}

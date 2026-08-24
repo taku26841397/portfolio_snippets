@@ -1,0 +1,42 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+{% load static %}
+
+
+
+
+
+
+<h2 class="mb-4">AI Tools Dashboard</h2>
+
+<div class="dashboard-grid">
+
+    <a href="{% url 'snippets_list' %}" class="tile">
+    <div class="tile-icon">
+      <img src="{% static 'icons/snippet.png' %}" alt="Snippets" class="icon-img">
+    </div>
+    <div class="tile-title">Snippets</div>
+    <div class="tile-desc">コードスニペット</div>
+  </a>
+
+  <a href="{% url 'language_detail' pk=8 %}" class="tile">
+    <div class="tile-icon">
+      <img src="{% static 'icons/prompt.png' %}" alt="Prompt Library" class="icon-img">
+    </div>
+    <div class="tile-title">Prompt Library</div>
+    <div class="tile-desc">テキストプロンプト</div>
+  </a>
+
+  <a href="{% url 'language_detail' pk=8 %}?type=image" class="tile">
+    <div class="tile-icon">
+      <img src="{% static 'icons/image.png' %}" alt="Image Prompts" class="icon-img">
+    </div>
+    <div class="tile-title">Image Prompts</div>
+    <div class="tile-desc">画像生成プロンプト</div>
+  </a>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">スニペットを編集</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">タイトル</label>
+        <input type="text" name="title" class="form-control" value={{ snippet.title }}>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">コード</label>
+        <textarea name="code" class="form-control" rows="8">{{ snippet.code }}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">説明（任意）</label>
+        <textarea name="description" class="form-control" rows="4">{{ snippet.description }}</textarea>
+    </div>
+
+    
+        <!-- 通常モード：言語選択あり -->
+        <div class="mb-3">
+            <label class="form-label">言語</label>
+            <select name="language" class="form-select" value={{ snippet.language.name }}>
+                {% for c in categories %}
+                    <option value="{{ c.pk }}">{{ c.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    
+
+    <button class="btn btn-primary">確定</button>
+</form>
+
+{% endblock %}

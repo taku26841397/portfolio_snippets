@@ -1,0 +1,128 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+
+<div class="mb-4">
+    <h2>{{ imageprompt.title }}</h2>
+
+
+    <!-- カテゴリ + 編集ボタン -->
+    <div class="d-flex align-items-center mb-2">
+        <p class="text-muted mb-0 me-2">
+            カテゴリ:
+            <a class="link-underline" href="{% url 'language_detail' imageprompt.language.pk %}">
+                {{ imageprompt.language.name }}
+            </a>
+        </p>
+
+        <div class="ms-auto d-flex gap-2">
+            <a href="{% url 'imageprompt_edit' imageprompt.pk %}" class="btn btn-sm btn-outline-dark">
+                ✏️ 編集
+            </a>
+
+            <a href="{% url 'imageprompt_delete' imageprompt.pk %}" class="btn btn-sm btn-outline-danger">
+                🗑️ 削除
+            </a>
+
+            <a href="{% url 'imagepromptcategory_detail' imageprompt.image_prompt_category.pk %}"
+                class="btn btn-sm btn-outline-secondary">
+                戻る
+            </a>
+        </div>
+
+
+
+    </div>
+
+    </a>
+    <!-- 投稿日 -->
+    <p class="text-muted small">
+        投稿日: {{ imageprompt.created_at|date:"Y-m-d H:i" }}
+    </p>
+    <div class="mt-2 text-muted" style="font-size: 0.9rem;">
+        使用モデル：{{ imageprompt.get_ai_model_display }}
+    </div>
+
+
+    <!-- 説明文 -->
+    {% if imageprompt.description %}
+    <div class="mb-3">
+        <p>{{ imageprompt.description }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- コード表示 -->
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>プロンプト</span>
+        <button class="btn btn-sm btn-outline-secondary" onclick="copyCode()">
+            コピー
+        </button>
+    </div>
+    <div class="card-body">
+        <pre id="code-block" class="bg-light p-3 rounded" style="white-space: pre-wrap;">
+{{ imageprompt.prompt }}
+        </pre>
+    </div>
+
+</div>
+
+<div class="d-flex gap-5">
+    <div class="mb-4">
+        <h3>元画像</h3>
+        {% if imageprompt.base_image %}
+        <div class="mb-2">
+            <img src="{{ imageprompt.base_image.url }}" alt="Base Image" class="img-fluid"
+                style="max-width: 250px; height: auto;">
+        </div>
+        <a href="{{ imageprompt.base_image.url }}" download class="btn btn-outline-secondary btn-sm">
+            画像をダウンロード
+        </a>
+
+        {% else %}
+        <p class="text-muted">元画像はありません。</p>
+        {% endif %}
+    </div>
+
+    <div class="mb-4">
+        <h3>生成画像</h3>
+        {% if imageprompt.generated_image %}
+        <div class="mb-2">
+            <img src="{{ imageprompt.generated_image.url }}" alt="Generated Image" class="img-fluid"
+                style="max-width: 250px; height: auto;">
+        </div>
+        <a href="{{ imageprompt.generated_image.url }}" download class="btn btn-outline-secondary btn-sm">
+            画像をダウンロード
+        </a>
+        {% else %}
+        <p class="text-muted">元画像はありません。</p>
+        {% endif %}
+    </div>
+</div>
+<script>
+    function copyCode() {
+        const code = document.getElementById("code-block").innerText;
+        navigator.clipboard.writeText(code).then(() => {
+            alert("プロンプトをコピーしました！");
+        });
+    }
+</script>
+
+{% endblock %}
+{% block sidebar_extra %}
+<div class="card mb-4">
+    <div class="card-header">SubCategory</div>
+    <ul class="list-group list-group-flush">
+        {% for sub in subcategories %}
+        <li class="list-group-item"><a href="{% url 'imagepromptcategory_detail' sub.pk %}">{{ sub.name }}</a></li>
+        {% empty %}
+        <li class="list-group-item text-muted">まだありません</li>
+        {% endfor %}
+        <li class="list-group-item">
+            <a href="{% url 'imagepromptcategory_add' %}">＋ サブカテゴリーを追加</a>
+        </li>
+    </ul>
+
+</div>
+{% endblock %}

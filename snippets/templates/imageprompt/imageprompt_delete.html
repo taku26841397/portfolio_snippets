@@ -1,0 +1,15 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">削除確認</h2>
+
+<p>「{{ imageprompt.title }}」を本当に削除しますか？</p>
+
+<form method="post">
+    {% csrf_token %}
+    <button class="btn btn-danger">削除する</button>
+    <a href="{% url 'imageprompt_detail' image  prompt.pk %}" class="btn btn-secondary">
+        戻る
+    </a>
+</form>
+{% endblock %}

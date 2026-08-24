@@ -1,0 +1,152 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">{{ title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">タイトル</label>
+        <input type="text" name="title" class="form-control" value={{ snippet.title|default:'' }}>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">コード</label>
+        <textarea name="code" class="form-control" rows="8">{{snippet.code|default:''}}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">説明（任意）</label>
+        <textarea name="description" class="form-control" rows="4">{{ snippet.description|default:"" }}</textarea>
+    </div>
+
+    {% if not fixed_lang %}
+    <!-- 通常モード：言語選択あり -->
+    <div class="mb-3">
+        <label class="form-label">言語</label>
+        <select id="language" name="language" class="form-select">
+            {% for c in categories %}
+            <option value="{{ c.pk }}" {% if  snippet.language.pk == c.pk %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% else %}
+    <!-- 言語固定モード：言語選択なし -->
+    <p class="text-muted">言語: {{ fixed_lang.name }}</p>
+    {% endif %}
+
+    <label>サブカテゴリ</label>
+<select id="subcategory" name="subcategory" class="form-select">
+    
+
+    {% for sub in subcategories %}
+    <option value="{{ sub.id }}"
+            data-lang="{{ sub.language.id }}"
+            
+            
+            {% if sub.id == sub.language.default_subcategory.id %}
+            data-default-sub="1"
+            {% endif %}
+
+            {# 編集時 #}
+            {% if snippet.SubCategory and snippet.SubCategory.id == sub.pk %}
+            selected
+            {% endif %}
+
+            {% if fixed_sub and fixed_sub.pk == sub.pk %}
+            selected
+            {% endif %}
+            {% if not snippet.SubCategory and not fixed_sub and fixed_lang and fixed_lang.default_subcategory.id == sub.pk %}
+            selected
+            {% endif %}
+            {% comment %} {% if not fixed_sub and not fixed_lang  %}selected{% endif %} {% endcomment %}
+            >
+        {{ sub.name }}
+    </option>
+    {% endfor %}
+</select>
+
+    <div class="d-flex justify-content-end gap-2 mt-3">
+        <button class="btn btn-primary">{{ button_label }}</button>
+
+        {% if fixed_lang %}
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+            戻る
+        </a>
+        {% else %}
+        <a href="javascript:history.back()" class="btn btn-outline-secondary">
+            戻る
+        </a>
+        {% endif %}
+    </div>
+
+
+</form>
+<script>
+   const langSelect = document.getElementById("language");
+const subSelect = document.getElementById("subcategory");
+const subs = document.querySelectorAll("#subcategory option");
+
+const isEdit = {{ snippet.id|default:"null" }} !== null;
+const hasFixedSub = {{ fixed_sub|yesno:"true,false" }};
+
+function applyFilter(langId) {
+    subs.forEach(opt => {
+        if (!opt.dataset.lang || opt.dataset.lang === langId) {
+            opt.style.display = "";
+        } else {
+            opt.style.display = "none";
+        }
+    });
+}
+
+function selectBase(langId) {
+    // ★ 編集時 or fixed_sub があるときは Base を選ばない
+    if (isEdit || hasFixedSub) return;
+
+    const baseOption = Array.from(subSelect.options).find(
+        opt => opt.dataset.lang === langId && opt.dataset.defaultSub === "1"
+    );
+
+    if (baseOption) {
+        subSelect.value = baseOption.value;
+    }
+}
+
+if (langSelect) {
+    langSelect.addEventListener("change", function () {
+        const langId = this.value;
+        applyFilter(langId);
+        selectBase(langId);
+    });
+
+    applyFilter(langSelect.value);
+    selectBase(langSelect.value);
+
+} else {
+    const fixedLangId = "{{ fixed_lang.id }}";
+    applyFilter(fixedLangId);
+    selectBase(fixedLangId);
+}
+
+</script>
+
+{% endblock %}
+{% block sidebar_extra %}
+{% if fixed_lang %}
+<div class="card mb-4">
+  <div class="card-header">SubCategory</div>
+  <ul class="list-group list-group-flush">
+    {% for sub in subcategories %}
+      <li class="list-group-item"><a href="{% url 'subcategory_detail' sub.pk  %}">{{ sub.name }}</a></li>
+    {% empty %}
+      <li class="list-group-item text-muted">まだありません</li>
+    {% endfor %}
+    <li class="list-group-item">
+            <a href="{% url 'subcategory_add' %}">＋ サブカテゴリーを追加</a>
+        </li>
+  </ul>
+</div>
+{% endif %}
+{% endblock %}

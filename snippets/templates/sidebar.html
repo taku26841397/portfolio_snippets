@@ -1,0 +1,14 @@
+<aside class="sidebar">
+  <h4 class="fw-bold mb-4">Code Archive</h4>
+
+  <a hx-get="/" hx-target="#content" hx-swap="innerHTML" class="nav-item-link">Top</a>
+  <a hx-get="/prompt" hx-target="#content" hx-swap="innerHTML" class="nav-item-link">Prompts</a>
+  <a hx-get="{% url 'snippet_add' %}" hx-target="#content" hx-swap="innerHTML" class="nav-item-link">New Prompt</a>
+
+  <hr>
+
+  <h6 class="text-muted">Languages</h6>
+  {% for c in categories %}
+    <a hx-get="/languages/{{ c.id }}" hx-target="#content" hx-swap="innerHTML" class="nav-item-link">{{ c.name }}</a>
+  {% endfor %}
+</aside>

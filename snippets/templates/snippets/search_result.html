@@ -1,0 +1,43 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">検索結果：{{ query }}</h2>
+
+<div class="mb-4">
+  <h4>スニペット</h4>
+  {% for s in snippet_results %}
+    <div class="p-3 mb-2 border rounded">
+      <h5><a href="{% url 'snippet_detail' s.pk %}">{{ s.title }}</a></h5>
+      <p>{{ s.description|truncatechars:100 }}</p>
+    </div>
+  {% empty %}
+    <p class="text-muted">該当なし</p>
+  {% endfor %}
+</div>
+
+<div class="mb-4">
+  <h4>プロンプト</h4>
+  {% for p in prompt_results %}
+    <div class="p-3 mb-2 border rounded">
+      <h5><a href="{% url 'prompt_detail' p.pk %}">{{ p.title }}</a></h5>
+      <p>{{ p.description|truncatechars:100 }}</p>
+    </div>
+  {% empty %}
+    <p class="text-muted">該当なし</p>
+  {% endfor %}
+</div>
+
+<div class="mb-4">
+  <h4>画像プロンプト</h4>
+  {% for ip in imageprompt_results %}
+    <div class="p-3 mb-2 border rounded">
+      <h5><a href="{% url 'imageprompt_detail' ip.pk %}">{{ ip.title }}</a></h5>
+      {% if ip.generated_image %}
+        <img src="{{ ip.generated_image.url }}" style="max-width:150px;" class="rounded">
+      {% endif %}
+    </div>
+  {% empty %}
+    <p class="text-muted">該当なし</p>
+  {% endfor %}
+</div>
+{% endblock %}

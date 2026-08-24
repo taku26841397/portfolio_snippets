@@ -1,0 +1,97 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">{{ title }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+        <label class="form-label">タイトル</label>
+        <input type="text" name="title" class="form-control" value={{ prompt.title|default:'' }}>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">プロンプト</label>
+        <textarea name="prompt" class="form-control" rows="8">{{prompt.prompt|default:''}}</textarea>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">説明（任意）</label>
+        <textarea name="description" class="form-control" rows="4">{{ prompt.description|default:"" }}</textarea>
+    </div>
+
+
+
+    <p class="text-muted">言語: AI</p>
+
+    <label>サブカテゴリ</label>
+    
+
+
+<select id="prompt_category" name="prompt_category" class="form-select">
+
+    {% for sc in subcategories %}
+    <option value="{{ sc.pk }}"
+            {% if not initial_subcategory_id and sc.name == "Base" %}selected{% endif %}
+            {% if initial_subcategory_id == sc.pk|stringformat:"s" %}selected{% endif %}
+            {% if sc.pk == prompt.prompt_category.pk %}selected{% endif %}>
+        {{ sc.name }}
+    </option>
+    {% endfor %}
+</select>
+
+
+
+<div class="d-flex justify-content-end gap-2 mt-3">
+    <button class="btn btn-primary">{{ button_label }}</button>
+    <a href="javascript:history.back()" class="btn  btn-outline-secondary">
+            戻る
+        </a>
+
+   
+</div>
+
+</form>
+
+<script>
+    const subSelect = document.getElementById("prompt_category");
+    const subs = document.querySelectorAll("#prompt_category option");
+
+    // 編集モード判定
+    const isEdit = "{{ initial_subcategory_id }}" !== "";
+
+    function selectBase() {
+        if (isEdit) return;  // 編集モードでは選択を変えない
+
+        const baseOption = Array.from(subSelect.options).find(
+            opt => opt.textContent.trim() === "Base"
+        );
+
+        if (baseOption) {
+            subSelect.value = baseOption.value;
+        }
+    }
+
+    // 初期状態
+    selectBase();
+</script>
+
+{% endblock %}
+{% block sidebar_extra %}
+
+<div class="card mb-4">
+  <div class="card-header">SubCategory</div>
+  <ul class="list-group list-group-flush">
+    {% for sub in subcategories %}
+      <li class="list-group-item"><a href="{% url 'promptcategory_detail' sub.pk  %}">{{ sub.name }}</a></li>
+    {% empty %}
+      <li class="list-group-item text-muted">まだありません</li>
+    {% endfor %}
+    <li class="list-group-item">
+            <a href="{% url 'promptcategory_add' %}">＋ サブカテゴリーを追加</a>
+        </li>
+  </ul>
+</div>
+
+{% endblock %}

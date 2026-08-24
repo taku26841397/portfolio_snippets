@@ -1,0 +1,139 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">{{ subcategory.name }} のスニペット</h2>
+{% if lang.name == "AI" %}
+    <div class="mb-3">
+        <a href="{% url 'prompt_add' lang.pk %}" class="btn btn-outline-secondary btn-sm me-2">
+            ＋ プロンプトを追加
+        </a>
+
+
+        <a href="{% url 'imageprompt_add' lang.pk %}" class="btn btn-outline-secondary btn-sm">
+            ＋ 画像生成プロンプトを追加
+        </a>
+    </div>
+
+    {# AI のタブ UI #}
+    <ul class="nav nav-tabs mb-3">
+        <li class="nav-item">
+            <a class="nav-link {% if view_type == 'prompt' %}active{% endif %}" href="?type=prompt">
+                普通のプロンプト
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if view_type == 'image' %}active{% endif %}" href="?type=image">
+                画像プロンプト
+            </a>
+        </li>
+    </ul>
+
+    {% if view_type == "prompt" %}
+
+        {% for p in items %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="link-underline" href="{% url 'prompt_detail' p.pk %}">{{ p.title }}</a>
+
+                    </h5>
+
+                    {% if p.description %}
+                    <p class="card-text">{{ p.description }}</p>
+                    {% endif %}
+
+                    <p class="text-muted small">
+                        投稿日: {{ p.created_at|date:"Y-m-d H:i" }}
+                    </p>
+                </div>
+            </div>
+        {% empty %}
+            <p>このカテゴリにはまだプロンプトがありません。</p>
+        {% endfor %}
+
+    {% else %}
+
+        {% for image in items %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <a class="link-underline" href="{% url 'imageprompt_detail' image.pk %}">{{ image.title }}</a>
+
+                    </h5>
+
+                    {% if image.description %}
+                    <p class="card-text">{{ image.description }}</p>
+                    {% endif %}
+
+                    <p class="text-muted small">
+                        投稿日: {{ image.created_at|date:"Y-m-d H:i" }}
+                    </p>
+                </div>
+            </div>
+        {% empty %}
+            <p>このカテゴリにはまだプロンプトがありません。</p>
+        {% endfor %}
+    {% endif %}
+
+
+{% else %}
+    
+    <a href="{% url 'snippet_add_language' lang.pk subcategory.pk %}" class="btn btn-outline-dark btn-sm mb-3">
+        ＋ Add Snippet
+    </a>
+    {% for s in snippets %}
+        <a href="{% url 'snippet_detail' s.pk %}" class="snippet-card-link">
+            <div class="card mb-3 snippet-card">
+                <div class="card-body">
+
+                    <h5 class="card-title mb-2">{{ s.title }}</h5>
+
+                    <div class="snippet-meta mb-2">
+                        <span class="badge bg-secondary me-1">{{ s.language.name }}</span>
+                        <span class="badge bg-light text-muted">{{ s.SubCategory.name }}</span>
+                    </div>
+
+                    {% if s.description %}
+                    <p class="card-text text-muted">{{ s.description }}</p>
+                    {% endif %}
+
+                    <p class="text-muted small mt-2">
+                        投稿日: {{ s.created_at|date:"Y-m-d H:i" }}
+                    </p>
+
+                </div>
+            </div>
+        </a>
+        {% empty %}
+
+        <p>このカテゴリにはまだスニペットがありません。</p>
+
+    {% endfor %}
+{% endif %}
+
+{% endblock %}
+{% block sidebar_extra %}
+
+{% for sub in subcategories %}
+<a class="subcat-link" href="{% url 'subcategory_detail' sub.pk %}">
+    {{ sub.name }}
+</a>
+{% empty %}
+<span class="subcat-empty">まだありません</span>
+{% endfor %}
+
+<a class="subcat-link add" href="{% url 'subcategory_add' %}">
+    ＋ Add
+</a>
+
+{% endblock %}
+
+{% block breadcrumb %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a class="link-underline" href="{% url 'snippets_list' %}">Snippets List</a></li>
+    <li class="breadcrumb-item"><a class="link-underline" href="{% url 'language_detail' lang.pk %}">{{ lang.name }}</a></li>
+    <li class="breadcrumb-item active">{{ subcategory.name }}</li>
+  </ol>
+</nav>
+{% endblock %}
