@@ -9,6 +9,33 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate,login
 from django.core.paginator import Paginator
 
+from django.core.management import call_command
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+import os
+
+@csrf_exempt
+def upload_data(request):
+    if request.method == "POST" and request.FILES.get("file"):
+        # アップロードされた data.json を一時保存
+        f = request.FILES["file"]
+        temp_path = "temp_data.json"
+
+        with open(temp_path, "wb+") as dest:
+            for chunk in f.chunks():
+                dest.write(chunk)
+
+        # loaddata を実行して PostgreSQL に流し込む
+        try:
+            call_command("loaddata", temp_path)
+            os.remove(temp_path)  # 一時ファイルを削除
+            return HttpResponse("Data loaded successfully")
+        except Exception as e:
+            return HttpResponse(f"Error: {e}")
+
+    return HttpResponse("Upload a file via POST")
+
+
 
 def login_view(request):
     
