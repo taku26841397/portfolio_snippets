@@ -44,7 +44,7 @@ urlpatterns = [
     path('imageprompt/<int:pk>/delete',views.imageprompt_delete,name='imageprompt_delete'),
     
     path('search/',views.site_search,name='site_search'),
-    path("upload-data/", views.upload_data),
+    
 
     
 ]

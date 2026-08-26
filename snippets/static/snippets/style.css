@@ -397,3 +397,10 @@ body {
     pointer-events: none;
     /* 消えた後クリックできないように */
 }
+
+
+/* ログインボタン */
+.btn-login:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}

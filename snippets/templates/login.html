@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <title>ログイン - Taku Archive</title>
@@ -24,7 +25,7 @@
             width: 380px;
             border-radius: 14px;
             background: #ffffff;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
             padding: 32px;
         }
 
@@ -67,32 +68,65 @@
 
 <body>
 
-<div class="login-wrapper">
-    <div class="login-card">
+    <div class="login-wrapper">
+        <div class="login-card">
 
-        <div class="text-center">
-            <div class="login-icon">🔐</div>
-            <div class="login-title mb-4">ログイン</div>
+            <div class="text-center">
+                <div class="login-icon">🔐</div>
+                <div class="login-title mb-4">ログイン</div>
+            </div>
+
+            {% if error_message %}
+            <div class="alert alert-danger">
+                {{ error_message }}
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{{ next }}">
+                <div class="mb-3">
+                    <label class="form-label">ユーザー名</label>
+                    <input type="text" name="username" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">パスワード</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+
+                <button id="login-btn" type="submit" class="btn btn-login w-100 mt-3" disabled>
+                    ログイン
+                </button>
+
+            </form>
+
         </div>
-
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}">
-            <div class="mb-3">
-                <label class="form-label">ユーザー名</label>
-                <input type="text" name="username" class="form-control" required>
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">パスワード</label>
-                <input type="password" name="password" class="form-control" required>
-            </div>
-
-            <button class="btn btn-login w-100 mt-3">ログイン</button>
-        </form>
-
     </div>
-</div>
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const username = document.querySelector('input[name="username"]');
+            const password = document.querySelector('input[name="password"]');
+            const loginBtn = document.getElementById("login-btn");
+
+            function checkInput() {
+                if (username.value.trim() !== "" && password.value.trim() !== "") {
+                    loginBtn.disabled = false;
+                    loginBtn.style.opacity = "1";  // 明るくする
+                } else {
+                    loginBtn.disabled = true;
+                    loginBtn.style.opacity = "0.5"; // 薄くする
+                }
+            }
+
+            username.addEventListener("input", checkInput);
+            password.addEventListener("input", checkInput);
+        });
+
+    </script>
+
 
 </body>
+
 </html>
