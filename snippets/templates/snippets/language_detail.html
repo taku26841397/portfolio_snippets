@@ -134,28 +134,35 @@
 
 {% for sub in subcategories %}
 <a class="subcat-link" href="{% url 'promptcategory_detail' sub.pk %}">
-    {{ sub.name }}
+    <i class="bi bi-folder-fill" style="color:#7b8794;"></i>
+ {{ sub.name }}
 </a>
 {% empty %}
 <span class="subcat-empty">まだありません</span>
 {% endfor %}
 
+<div class="mt-2">
 <a class="subcat-link add" href="{% url 'promptcategory_add' %}">
-    ＋ Add
+    <i class="bi bi-plus-lg"></i> Add SubCategory
 </a>
+</div>
+
 {% else %}
 
 {% for sub in subcategories %}
 <a class="subcat-link" href="{% url 'imagepromptcategory_detail' sub.pk %}">
-    {{ sub.name }}
+    <i class="bi bi-folder-fill" style="color:#7b8794;"></i>
+ {{ sub.name }}
 </a>
 {% empty %}
 <span class="subcat-empty">まだありません</span>
 {% endfor %}
 
+<div class="mt-2">
 <a class="subcat-link add" href="{% url 'imagepromptcategory_add' %}">
-    ＋ Add
+    <i class="bi bi-plus-lg"></i> Add SubCategory
 </a>
+</div>
 {% endif %}
 
 
@@ -164,15 +171,18 @@
 
 {% for sub in subcategories %}
 <a class="subcat-link" href="{% url 'subcategory_detail' sub.pk %}">
-    {{ sub.name }}
+    <i class="bi bi-folder-fill" style="color:#7b8794;"></i>
+ {{ sub.name }}
 </a>
 {% empty %}
 <span class="subcat-empty">まだありません</span>
 {% endfor %}
 
+<div class="mt-2">
 <a class="subcat-link add" href="{% url 'subcategory_add' %}">
-    ＋ Add SubCategory
+    <i class="bi bi-plus-lg"></i> Add SubCategory
 </a>
+</div>
 
 
 

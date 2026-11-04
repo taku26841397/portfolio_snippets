@@ -1,0 +1,27 @@
+{% extends "snippets/base.html" %}
+
+{% block main %}
+<h2 class="mb-4">削除確認</h2>
+
+<p>「{{ sub.name }}」を本当に削除しますか？</p>
+
+
+
+<form method="post">
+    {% csrf_token %}
+<label>
+    <input type="radio" name="delete_mode" value="set_null" checked>
+    このサブカテゴリに属するSnippetを残す（通常の削除）
+</label><br>
+
+<label>
+    <input type="radio" name="delete_mode" value="delete_all">
+    このサブカテゴリに属する Snippet をすべて削除する
+</label><br><br>
+
+    <button class="btn btn-danger">削除する</button>
+    <a href="{% url 'subcategory_detail' sub.pk %}" class="btn btn-secondary">
+        戻る
+    </a>
+</form>
+{% endblock %}

@@ -15,6 +15,7 @@ urlpatterns = [
     #subcategory
     path('subcategory/<int:pk>',views.subcategory_detail,name='subcategory_detail'),
     path('subcategory/add',views.subcategory_add,name='subcategory_add'),
+    path('subcategory/<int:pk>/delete',views.subcategory_delete,name='subcategory_delete'),
     #PromptCategory
     path('promptcategory/add',views.promptcategory_add,name='promptcategory_add'),
     path('promptcategory/<int:pk>',views.promptcategory_detail,name='promptcategory_detail'),

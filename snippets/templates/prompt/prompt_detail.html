@@ -39,12 +39,7 @@
     </p>
     
 
-    <!-- 説明文 -->
-    {% if prompt.description %}
-        <div class="mb-3">
-            <p>{{ prompt.description }}</p>
-        </div>
-    {% endif %}
+    
 </div>
 
 <!-- コード表示 -->
@@ -61,6 +56,22 @@
         </pre>
     </div>
 </div>
+
+{% if prompt.description %}
+<div class="card mb-4">
+    <div class="card-header">
+        <span>説明</span>
+    </div>
+
+    <div class="card-body">
+        <div class="p-3 rounded">
+            {{ prompt.description|linebreaks }}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+
 
 <script>
 function copyCode() {

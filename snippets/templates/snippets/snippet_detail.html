@@ -7,47 +7,42 @@
 
     
     <!-- カテゴリ + 編集ボタン -->
-<div class="d-flex align-items-center mb-2">
-    <p class="text-muted mb-0 me-2">
-        カテゴリ: 
-        <a class="link-underline" href="{% url 'language_detail' snippet.language.pk %}">
-            {{ snippet.language.name }}
-        </a>
-    </p>
+    <div class="d-flex align-items-center mb-2">
+        <p class="text-muted mb-0 me-2">
+            カテゴリ: 
+            <a class="link-underline" href="{% url 'language_detail' snippet.language.pk %}">
+                {{ snippet.language.name }}
+            </a>
+        </p>
 
-    
- <div class="ms-auto d-flex gap-2">
-        <a href="{% url 'snippet_edit' snippet.pk %}" 
-           class="btn btn-sm btn-outline-dark">
-            ✏️ 編集
-        </a>
+        
+        <div class="ms-auto d-flex gap-2">
+            <a href="{% url 'snippet_edit' snippet.pk %}" 
+            class="btn btn-sm btn-outline-dark">
+                ✏️ 編集
+            </a>
 
-        <a href="{% url 'snippet_delete' snippet.pk %}" 
-           class="btn btn-sm btn-outline-danger">
-            🗑️ 削除
-        </a>
+            <a href="{% url 'snippet_delete' snippet.pk %}" 
+            class="btn btn-sm btn-outline-danger">
+                🗑️ 削除
+            </a>
 
-        {% comment %} <a href="{% url 'language_detail' snippet.language.pk %}" 
-           class="btn btn-sm btn-outline-secondary"> {% endcomment %}
-        <a href="{% url 'subcategory_detail' snippet.SubCategory.pk  %}" class="btn btn-sm btn-outline-secondary">
-            戻る
-        </a>
+            {% comment %} <a href="{% url 'language_detail' snippet.language.pk %}" 
+            class="btn btn-sm btn-outline-secondary"> {% endcomment %}
+            <a href="{% url 'subcategory_detail' snippet.SubCategory.pk  %}" class="btn btn-sm btn-outline-secondary">
+                戻る
+            </a>
+        </div>
     </div>
-</div>
 
-</a>
+
     <!-- 投稿日 -->
     <p class="text-muted small">
         投稿日: {{ snippet.created_at|date:"Y-m-d H:i" }}
     </p>
     
 
-    <!-- 説明文 -->
-    {% if snippet.description %}
-        <div class="mb-3">
-            <p>{{ snippet.description }}</p>
-        </div>
-    {% endif %}
+    
 </div>
 
 <!-- コード表示 -->
@@ -60,10 +55,25 @@
     </div>
     <div class="card-body">
         <pre id="code-block" class="bg-light p-3 rounded" style="white-space: pre-wrap;"><code>
-{{ snippet.code }}
+    {{ snippet.code }}
         </code></pre>
     </div>
 </div>
+
+    <!-- 説明文 -->
+    {% if snippet.description %}
+    <div class="card mb-4">
+        <div class="card-header">
+            <span>説明</span>
+        </div>
+
+        <div class="card-body">
+            <div class=" p-3 rounded">
+                {{ snippet.description|linebreaks }}
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
 <script>
 function copyCode() {
@@ -80,7 +90,7 @@ function copyCode() {
   <div class="card-header">SubCategory</div>
   <ul class="list-group list-group-flush">
     {% for sub in subcategories %}
-      <li class="list-group-item"><a class="link-underline" href="{% url 'subcategory_detail' sub.pk  %}">{{ sub.name }}</a></li>
+      <i class="bi bi-folder2-open"></i> Base<li class="list-group-item"><a class="link-underline" href="{% url 'subcategory_detail' sub.pk  %}">{{ sub.name }}</a></li>
     {% empty %}
       <li class="list-group-item text-muted">まだありません</li>
     {% endfor %}

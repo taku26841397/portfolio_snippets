@@ -84,7 +84,7 @@
 {% endblock %}
 {% block sidebar_extra %}
 
-<div class="card mb-4">
+{% comment %} <div class="card mb-4">
   <div class="card-header">SubCategory</div>
   <ul class="list-group list-group-flush">
     {% for sub in subcategories %}
@@ -96,6 +96,7 @@
             <a href="{% url 'imagepromptcategory_add' %}">＋ サブカテゴリーを追加</a>
         </li>
   </ul>
-</div>
+</div> {% endcomment %}
+
 
 {% endblock %}

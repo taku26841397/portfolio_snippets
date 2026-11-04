@@ -184,7 +184,7 @@ def imagepromptcategory_detail(request,pk):
     })
     
     
-@login_required
+#  @login_required
 def subcategory_add(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -200,7 +200,30 @@ def subcategory_add(request):
     
     return render(request,"subcategory/subcategory_add.html")
 
-@login_required
+
+def subcategory_delete(request,pk):
+    sub = get_object_or_404(SubCategory,pk=pk)
+    sub_lang = sub.language.pk
+    
+    if request.method == "POST":
+        mode = request.POST.get("delete_mode")
+        
+        if mode == "delete_all":
+            Snippet.objects.filter(SubCategory=sub).delete()
+            
+        if mode == "set_null":
+            base_sub = SubCategory.objects.get(language=sub.language,name="Base")
+            query_set = Snippet.objects.filter(SubCategory=sub)
+            query_set.update(SubCategory=base_sub)
+            
+        sub.delete()
+        messages.success(request,f"サブカテゴリ「{sub.name}」を削除しました。")
+        return redirect("language_detail",pk=sub_lang)
+    return render(request,"subcategory/subcategory_delete.html",{
+        "sub":sub,
+    })
+
+#  @login_required
 def language_add(request):
     if request.method == "POST":
         name = request.POST.get("name")
@@ -210,7 +233,7 @@ def language_add(request):
     
     return render(request,"snippets/language_add.html")
             
-@login_required
+#  @login_required
 def snippet_add(request,pk=None,sub_pk=None):
     # subcategories =SubCategory.objects.all()
     fixed_lang = None
@@ -274,7 +297,7 @@ def snippet_add(request,pk=None,sub_pk=None):
         
     })
     
-@login_required
+#  @login_required
 def snippet_edit(request,pk):
     snippet = get_object_or_404(Snippet,pk=pk)
     # subcategories = SubCategory.objects.filter(language=snippet.language)
@@ -325,7 +348,7 @@ def snippet_delete(request,pk):
     })
     
     
-@login_required
+#  @login_required
 def prompt_add(request,pk):
     subcategories = PromptCategory.objects.all()
     lang = Language.objects.get(pk=pk)
@@ -373,7 +396,7 @@ def prompt_detail(request,pk):
         "prompt":prompt,
         "subcategories":subcategories,
     })
-@login_required
+#  @login_required
 def prompt_edit(request,pk):
     prompt = get_object_or_404(Prompt,pk=pk)
     subcategories = PromptCategory.objects.all()
@@ -429,7 +452,7 @@ def imageprompt_delete(request,pk):
     return render(request,"prompt/imageprompt_delete.html",{
         "imageprompt":prompt
     })
-@login_required  
+#  @login_required  
 def promptcategory_add(request):
     language = Language.objects.get(name="AI")
     if request.method == "POST":
@@ -449,7 +472,7 @@ def promptcategory_add(request):
 
 
 
-@login_required
+#  @login_required
 def imageprompt_add(request,pk):
     subcategories = ImagePromptCategory.objects.all()
     lang=Language.objects.get(pk=pk)
@@ -463,6 +486,7 @@ def imageprompt_add(request,pk):
         prompt = request.POST.get("prompt")
         base_image = request.FILES.get("base_image")
         generated_image = request.FILES.get("generated_image")
+        description = request.POST.get("description")
         category_id = request.POST.get("image_category")
         
         image_prompt_category =None
@@ -475,6 +499,7 @@ def imageprompt_add(request,pk):
             prompt = prompt,
             base_image = base_image,
             generated_image = generated_image,
+            description = description,
             language = lang,
             image_prompt_category = image_prompt_category
         )    
@@ -503,7 +528,7 @@ def imageprompt_detail(request,pk):
         "imageprompt":imageprompt,
         "subcategories":subcategories,
     })
-@login_required
+#  @login_required
 def imageprompt_edit(request,pk):
     subcategories = ImagePromptCategory.objects.all()
     imageprompt = get_object_or_404(ImagePrompt,pk=pk)
@@ -547,7 +572,7 @@ def imageprompt_edit(request,pk):
         
     })
     
-@login_required
+#  @login_required
 def imagepromptcategory_add(request):
     if request.method == "POST":
         name = request.POST.get("name")

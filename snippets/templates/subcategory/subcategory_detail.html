@@ -81,6 +81,9 @@
     <a href="{% url 'snippet_add_language' lang.pk subcategory.pk %}" class="btn btn-outline-dark btn-sm mb-3">
         ＋ Add Snippet
     </a>
+    <a href="{% url 'subcategory_delete' subcategory.pk %}" class="btn btn-sm btn-outline-danger mb-3 ms-auto">
+        Delete SubCategory
+    </a>
     {% for s in snippets %}
         <a href="{% url 'snippet_detail' s.pk %}" class="snippet-card-link">
             <div class="card mb-3 snippet-card">
@@ -116,7 +119,7 @@
 
 {% for sub in subcategories %}
 <a class="subcat-link" href="{% url 'subcategory_detail' sub.pk %}">
-    {{ sub.name }}
+    <i class="bi bi-folder2-open"></i> {{ sub.name }}
 </a>
 {% empty %}
 <span class="subcat-empty">まだありません</span>

@@ -319,7 +319,7 @@ body {
 /* サブカテゴリー */
 .subcat-link {
     display: block;
-    margin-left: 16px;
+    margin-left: 24px;
     /* インデント */
     font-size: 0.85rem;
     /* 小さめの文字 */
@@ -335,9 +335,15 @@ body {
 }
 
 .subcat-link.add {
-    color: #0d6efd;
+    color: #495057;
     /* 青系で「追加」を強調 */
     font-weight: 500;
+    font-size: 0.75rem;
+
+}
+
+.subcat-link.add:hover {
+    color: #0d6efd;
 }
 
 .subcat-empty {
