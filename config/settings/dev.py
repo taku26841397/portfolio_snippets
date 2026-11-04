@@ -3,4 +3,8 @@ from .base import *
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['portfolio-snippets.onrender.com','127.0.0.1']
+ALLOWED_HOSTS = [
+    '151.145.74.184',
+    'localhost',
+    '127.0.0.1',
+]
