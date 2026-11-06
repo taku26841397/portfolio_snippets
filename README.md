@@ -1,107 +1,208 @@
-# 📝 Snippets 管理アプリ（Django / FBV / Render）
+# 📝 Snippets 管理アプリ（Django / FBV / Oracle Cloud）
 
-コードスニペットをカテゴリ別に整理・検索・管理する Django アプリです。
-Function-Based Views（FBV） を採用し、処理の流れを明確化しながら
-認証・カテゴリフィルタ・CRUD・本番環境デプロイまで一通り実装しています。
+コードスニペット・テキストプロンプト・画像プロンプトを
+カテゴリ別に整理・検索・管理できる Django アプリです。
 
-本番環境は Render を使用し、Whitenoise による静的ファイル配信など
-実運用を意識した構成にしています。
+Function-Based Views（FBV）を採用し、認証・検索・カテゴリ管理・CRUD を実装しています。
+
+本番環境は Oracle Cloud Infrastructure（OCI）上に構築し、
+Nginx・Gunicorn・PostgreSQL・Let's Encrypt を利用した構成で運用しています。
 
 ---
 
-## 🌐 公開 URL
-https://portfolio-snippets.onrender.com
+## 🌐 公開URL
+
+https://snippets.taku-archive.dev
 
 ---
 
 ## 🔑 テストユーザー
+
 動作確認用のユーザーを用意しています。
 
-- **ユーザー名：** testuser  
-- **パスワード：** testpass123  
+- ユーザー名: testuser
+- パスワード: testpass123
 
 ---
 
 ## 🛠 使用技術
 
 ### Backend
-- Python 3.x  
-- Django 4.x  
-- Django Function-Based Views（FBV） list / detail / create / update / delete 
-- Context Processor（カテゴリ一覧の共通化）
-- CSRF / セッション管理（7日維持）
-- @login_required による認証制御
+
+- Python 3.x
+- Django 4.x
+- Function-Based Views（FBV）
+- PostgreSQL
+- Context Processor
+- CSRF Protection
+- Django Authentication
+- Session Management
 
 ### Frontend
-- HTML / CSS
-- シンプルな UI / カテゴリタグによる視認性向上
+
+- HTML
+- CSS
+- Bootstrap
+- レスポンシブ対応
 
 ### Infrastructure
-- Render（デプロイ）  
+
+- Oracle Cloud Infrastructure (OCI)
+- Ubuntu Server
+- Nginx
+- Gunicorn
+- PostgreSQL
+- Let's Encrypt
+- systemd
+- GitHub
+
+### Development
+
 - SQLite（開発環境）
-- Whitenoise（静的ファイル配信）
+- Git
+- GitHub
 
 ---
 
-## 📌 機能一覧
+## 📌 主な機能
 
-### ✔  スニペット管理
-- スニペットの登録（snippet_add /言語固定モード（pk） / サブカテゴリ固定モード（sub_pk）
-- 一覧表示（snippets_list / ページネーション対応）
-- 詳細表示（snippet_detail）
-- 編集（snippet_edit / サブカテゴリ変更）
-- 削除（snippet_delete / 削除確認ページ）
+### ✔ スニペット管理
 
-### ✔  言語管理
-- 言語詳細（language_detail / AI 言語は Prompt / ImagePrompt に切替）
-- 言語追加（language_add）
-- サブカテゴリ詳細（subcategory_detail）
-- サブカテゴリ追加（subcategory_add）
+- スニペット登録
+- スニペット編集
+- スニペット削除
+- スニペット詳細表示
+- ページネーション付き一覧表示
 
-### ✔  検索機能
-- サイト内検索（site_search / Snippet・Prompt・ImagePrompt を横断検索）
+### ✔ 言語管理
+
+- 言語作成
+- 言語詳細表示
+- サブカテゴリ管理
+- サブカテゴリ追加
+
+### ✔ テキストプロンプト管理
+
+- Prompt 作成
+- Prompt 編集
+- Prompt 削除
+- Prompt 詳細表示
+
+### ✔ 画像プロンプト管理
+
+- Image Prompt 作成
+- Image Prompt 編集
+- Image Prompt 削除
+- 画像アップロード
+- 画像表示
+
+### ✔ 検索機能
+
+- Site Search
+- Snippet / Prompt / ImagePrompt 横断検索
 
 ### ✔ 認証機能
-- ログイン / ログアウト
-- @login_required によるアクセス制御
 
-
+- ログイン
+- ログアウト
+- `@login_required`
+- セッション管理
 
 ---
 
-## 🎨 UI / デザインのポイント
-- シンプルで見やすいレイアウト  
-- Todo の完了状態を色分けして視認性を向上  
-- CRUD 操作を直感的に行える UI  
-- ログイン画面も統一感のあるデザインに調整  
+## 🚀 本番構成
+
+```text
+Browser
+↓
+Nginx
+↓
+Gunicorn
+↓
+Django
+↓
+PostgreSQL
+```
+
+### 本番環境で実施した内容
+
+- Oracle Cloud 上へ Ubuntu サーバーを構築
+- PostgreSQL を導入
+- Nginx + Gunicorn 構成へ移行
+- HTTPS (Let's Encrypt) 対応
+- 独自ドメイン運用
+- Static ファイル配信
+- Media ファイル配信
+- Gunicorn の systemd 自動起動設定
+
+---
+
+## 🎨 UI / デザイン
+
+- シンプルで見やすいレイアウト
+- カテゴリごとの整理
+- CRUD 操作を直感的に行える画面構成
+- 統一感を意識したデザイン
 
 ---
 
 ## 🧩 工夫した点
-- クラスベースビューではなく FBV を採用し、処理の流れを明確に把握できる構成にしています。 
-- 関数ビューに直接 @login_required を付与することで処理の見通しを良くしています。  
-- Whitenoise を使用し、追加の CDN を使わずに高速配信を実現。   
-- Render へのデプロイを通じて、本番環境での動作を確認  
-- 本番 DB に **testuser** を作成し、企業がすぐに動作確認できるよう配慮  
+
+### Function Based Views を採用
+
+クラスベースビューではなく FBV を採用し、
+リクエストからレスポンスまでの流れを把握しやすい構成にしています。
+
+### カテゴリ構造の整理
+
+Language → Category → Prompt の構造を採用し、
+管理しやすいデータ設計を行いました。
+
+### Oracle Cloud へのデプロイ
+
+Render から Oracle Cloud へ移行し、
+
+- Ubuntu
+- PostgreSQL
+- Gunicorn
+- Nginx
+- HTTPS
+
+を自分で構築しました。
+
+### 実運用を意識した構成
+
+- 本番DBにテストユーザーを用意
+- HTTPS対応
+- Mediaファイル管理
+- Gunicorn自動起動
+- 独自ドメイン運用
 
 ---
 
-## 📁 ディレクトリ構成（抜粋）
+## 📁 ディレクトリ構成
 
-```
+```text
 snippets/
-  ├── migrations/
-  ├── templates/snippets/
-  ├── static/snippets/
-  ├── models.py
-  ├── views.py        # CRUD（FBV）
-  ├── urls.py
-  └── context_processors.py
+├── migrations/
+├── templates/snippets/
+├── static/snippets/
+├── models.py
+├── views.py
+├── urls.py
+└── context_processors.py
 
 config/
-  ├── settings.py
-  ├── urls.py
-  └── wsgi.py
+├── settings/
+│   ├── base.py
+│   ├── dev.py
+│   └── prod.py
+├── urls.py
+├── wsgi.py
+└── asgi.py
+
+media/
+staticfiles/
 
 manage.py
 requirements.txt
@@ -109,5 +210,16 @@ requirements.txt
 
 ---
 
+## 📚 今後の改善予定
+
+- GitHub Actions による自動デプロイ
+- PostgreSQL バックアップ自動化
+- UI改善
+- タグ機能追加
+- API化
+
+---
+
 ## 📄 ライセンス
-このプロジェクトは MIT License のもとで公開しています。
+
+MIT License
