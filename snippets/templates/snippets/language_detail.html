@@ -107,7 +107,7 @@
             </div>
 
             {% if s.description %}
-            <p class="card-text text-muted">{{ s.description }}</p>
+            <p class="card-text text-muted">{{ s.description|truncatechars:30 }}</p>
             {% endif %}
 
             <p class="text-muted small mt-2">

@@ -54,9 +54,9 @@
         </button>
     </div>
     <div class="card-body">
-        <pre id="code-block" class="bg-light p-3 rounded" style="white-space: pre-wrap;"><code>
-    {{ snippet.code }}
-        </code></pre>
+        <pre id="code-block" class="bg-light p-3 rounded" style="white-space: pre-wrap;">
+    <code>{{ snippet.code }}</code>
+        </pre>
     </div>
 </div>
 
@@ -68,9 +68,9 @@
         </div>
 
         <div class="card-body">
-            <div class=" p-3 rounded">
-                {{ snippet.description|linebreaks }}
-            </div>
+            <div class=" p-3 rounded" style="white-space: pre-wrap;">{{ snippet.description }}</div>
+                
+            
         </div>
     </div>
     {% endif %}
