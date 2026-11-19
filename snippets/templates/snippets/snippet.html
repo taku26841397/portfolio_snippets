@@ -1,10 +1,20 @@
 {% extends "snippets/base.html" %}
 
 {% block main %}
-<h2>最新のスニペット</h2>
-<a href="{% url 'snippet_add' %}" class="btn btn-outline-dark mb-3">
-    ＋ スニペットを追加
-</a>
+<h2 class="mb-4">最新のスニペット</h2>
+<div class="mb-3">
+    <a href="{% url 'snippet_add' %}" class="btn btn-outline-secondary btn-sm me-2">
+    ＋ Add Snippet
+    </a>
+    {% comment %} <a href="{% url 'prompt_add' pk=8 %}" class="btn btn-outline-secondary btn-sm me-2">
+        ＋ Add Prompt
+    </a>
+
+
+    <a href="{% url 'imageprompt_add' pk=8 %}" class="btn btn-outline-secondary btn-sm">
+        ＋ Add ImagePrompt
+    </a> {% endcomment %}
+</div>
 
 {% for s in snippets %}
 <a href="{% url 'snippet_detail' s.pk %}" class="snippet-card-link">
